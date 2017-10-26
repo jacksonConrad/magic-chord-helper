@@ -30,7 +30,7 @@ class Chord extends Component {
   }
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     var classes = "chord " + this.state.active;
 
     var selectedMode;
