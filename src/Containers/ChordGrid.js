@@ -3,6 +3,14 @@ import { Grid, Row, Col } from 'react-bootstrap'
 import Chord from '../Components/Chord.js'
 
 class ChordGrid extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      chords: [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ],
+      tonic: null,
+      chordsInKey: []
+    }
+  }
 
   computeIntervalsFromRoot(tonic) {
     const major = 'major'
@@ -18,18 +26,24 @@ class ChordGrid extends Component {
     // [ I, ii, iii, IV, V, vi, vii]
     // [ A, Bm, C#m, D, E, F#m, G#dim ]
 
+    // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    // [4, 5, 6, 7, 8, 9, 0, 1, 2, 3]
+
+    let logNotes = {}
+    logNotes.tonic = tonic
+
     let indexOfTonic = chords.indexOf(tonic)
+    logNotes.indexOfTonic = indexOfTonic
 
     const chordRootsInKey = () => {
       let resultsChords = []
-      let chordIndex = 0
+      let chordIndex = indexOfTonic
       for (var i = 0; i < intervals.length; i++) {
         chordIndex += intervals[i]
-        resultsChords.push(chords[chordIndex])
+        resultsChords.push(chords[chordIndex % chords.length])
       }
       return resultsChords;
     }
-
 
     const populateChordResults = (chordsForCurrentKey) => {
       var populatedResponse = []
@@ -41,80 +55,132 @@ class ChordGrid extends Component {
 
     let resultChords = chordRootsInKey();
     resultChords = populateChordResults(resultChords)
-    console.log(resultChords)
+    // console.log(logNotes)
+    // console.log(resultChords)
+    return resultChords
   }
 
 
+  computeKeysFromChord = (chord) => {
+    if ( chord === null ) {
+      return false
+    }
+    const chordMap = [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
+
+//      [ a ] [ a#] [ b ] [ c ] [ c#] [ d ] [ d#] [ e ] [ f ] [ f#] [ g ] [ g#]
+// [ a ]  1     0     2     0     2     1     0     1     0     2     0     3
+// [ a#]  3     1     0     2     0     2     1     0     1     0     2     0
+// [ b ]  0     3     1     0     2     0     2     1     0     1     0     2
+// [ c ]  2     0     3     1     0     2     0     2     1     0     1     0
+// [ c#]  0     2     0     3     1     0     2     0     2     1     0     1
+// [ d ]  1     0     2     0     3     1     0     2     0     2     1     0
+// [ d#]  0     1     0     2     0     3     1     0     2     0     2     1
+// [ e ]  1     0     1     0     2     0     3     1     0     2     0     2
+// [ f ]  2     1     0     1     0     2     0     3     1     0     2     0
+// [ f#]  0     2     1     0     1     0     2     0     3     1     0     2
+// [ g ]  2     0     2     1     0     1     0     2     0     3     1     0
+// [ g#]  0     2     0     2     1     0     1     0     2     0     3     1
+
+    const chordMatrix = [ [ 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3 ],
+                          [ 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0 ],
+                          [ 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2 ],
+                          [ 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0 ],
+                          [ 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1 ],
+                          [ 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0 ],
+                          [ 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1 ],
+                          [ 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2 ],
+                          [ 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0 ],
+                          [ 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2 ],
+                          [ 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0 ],
+                          [ 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1 ] ]
+
+    const traverseMatrixForChords = (chord) => {
+      let chordIndex = chordMap.indexOf(chord)
+      let majorChords = []
+      let minorChords = []
+
+      let chordsInKeyOf = chordMatrix[chordIndex]
+
+      let keysInWhichChordAppears = []
+      for ( var i = 0; i < chordMatrix.length; i++ ) {
+        keysInWhichChordAppears.push(chordMatrix[i][chordIndex])
+      }
+      return [ chordsInKeyOf, keysInWhichChordAppears ]
+    }
+
+    const mapMatrixResultToChords = (chords) => {
+      const modes = [null, 'major', 'minor', 'diminished']
+      var response = []
+
+      for ( var i = 0; i < chords.length; i++ ) {
+        for ( var j = 0; j < chords[i].length; j++ ) {
+          if ( chords[i][j] === 0 ) {
+            continue;
+          } else {
+            response.push({chord: chordMap[j], mode: modes[chords[i][j]]} )
+          }
+        }
+
+      }
+      return response
+    }
+
+    this.setState({ chordsInKey: mapMatrixResultToChords(traverseMatrixForChords(chord)) })
+
+  }
+
+
+  handleChordChange = (chord) => {
+    this.setState({ tonic: chord })
+    this.computeKeysFromChord(this.state.tonic)
+  }
+
 
   render() {
-    this.computeIntervalsFromRoot()
 
-    let chords2 = [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
-    for ( var i = 0; i < chords2.length; i++ ) {
-      this.computeIntervalsFromRoot(chords2[i])
+    console.log(this.state)
+
+    this.activateChord = (chord) => {
+      let chordsInKey = this.state.chordsInKey
+      let justChords = chordsInKey.map((chord) => {
+        return chord.chord
+      })
+      if ( justChords.indexOf(chord) != -1 ) {
+        return 'active'
+      } else {
+        return ''
+      }
     }
+
+    this.findMode = (chord) => {
+      let mChords = []
+      let chordsInKey = this.state.chordsInKey
+      chordsInKey.map((chord) => {
+        if (chord.mode === 'minor') {
+          mChords.push(chord.chord)
+        }
+      })
+      if ( mChords.indexOf(chord) != -1 ) {
+        return 'minor'
+      } else {
+        return 'major'
+      }
+    }
+
+    const chordDisplay = this.state.chords.map((chord, index) => {
+      return(
+        <Col xs={6} sm={4} md={3}>
+          <Chord className='chord' tonic={chord} active={this.activateChord(chord)} key={index} mode={this.findMode(chord)} handleChordChange={this.handleChordChange}/>
+        </Col>
+      )
+    })
 
     return (
       <div className="chord-grid">
         <Grid>
           <Row>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="A"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="Bb"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="B"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="C"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="C#"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="D"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="Eb"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="E"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="F"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="F#"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="G"/>
-            </Col>
-            <Col xs={6} sm={4} md={3}>
-              <Chord className="chord" tonic="Ab"/>
-            </Col>
+            {chordDisplay}
           </Row>
-
-          {/* <Row className="show-grid">
-            <Col xs={12} md={8}><code>&lt;{'Col xs={12} md={8}'} /&gt;</code></Col>
-            <Col xs={6} md={4}><code>&lt;{'Col xs={6} md={4}'} /&gt;</code></Col>
-          </Row>
-
-          <Row className="show-grid">
-            <Col xs={6} md={4}><code>&lt;{'Col xs={6} md={4}'} /&gt;</code></Col>
-            <Col xs={6} md={4}><code>&lt;{'Col xs={6} md={4}'} /&gt;</code></Col>
-            <Col xsHidden md={4}><code>&lt;{'Col xsHidden md={4}'} /&gt;</code></Col>
-          </Row>
-
-          <Row className="show-grid">
-            <Col xs={6} xsOffset={6}><code>&lt;{'Col xs={6} xsOffset={6}'} /&gt;</code></Col>
-          </Row>
-
-          <Row className="show-grid">
-            <Col md={6} mdPush={6}><code>&lt;{'Col md={6} mdPush={6}'} /&gt;</code></Col>
-            <Col md={6} mdPull={6}><code>&lt;{'Col md={6} mdPull={6}'} /&gt;</code></Col>
-          </Row> */}
         </Grid>
       </div>
     );
