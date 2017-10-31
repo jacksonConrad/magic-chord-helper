@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
+import ChordGrid from '../Containers/ChordGrid'
+import { connect } from 'react-redux'
+import { addChord, removeChord } from '../Actions'
 import MajorSelector from './MajorSelector.js'
 import MinorSelector from './MinorSelector.js'
 
 class Chord extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { active: this.props.active, mode: this.props.mode };
-    this.handleClick = this.handleClick.bind(this);
-    this.selectMajor= this.selectMajor.bind(this);
-    this.selectMinor= this.selectMinor.bind(this);
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = { active: this.props.active, mode: this.props.mode };
+  //   this.handleClick = this.handleClick.bind(this);
+  //   this.selectMajor= this.selectMajor.bind(this);
+  //   this.selectMinor= this.selectMinor.bind(this);
+  // }
 
-  handleClick() {
+  handleClick = () => {
+    console.log(this.props)
     this.props.handleChordChange(this.props.tonic)
     // var active;
     // if (this.state.active == 'active') {
@@ -22,16 +26,35 @@ class Chord extends Component {
     // this.setState({active: active});
   }
 
-  selectMajor(e) {
-    this.setState({mode: 'major'});
+  selectMajor = (e) => {
+    // this.setState({mode: 'major'});
   }
 
-  selectMinor(e) {
-    this.setState({mode: 'minor'});
+  selectMinor = (e) => {
+    // this.setState({mode: 'minor'});
+  }
+
+  mapStateToProps = state => {
+    return {
+      selectedChords: state.selectedChords
+    }
+  }
+
+  mapDispatchToProps = dispatch => {
+    return {
+      // handleClick: chord => {
+      //   dispatch(addChord(chord))
+      // }
+    }
+  }
+
+  isChordSelected = (chord) => {
+    // let selectedChords = this.props.getState().selectedChords
+    // console.log(selectedChords)
   }
 
   render() {
-    // console.log(this.state);
+
     var classes = "chord " + this.props.active;
 
     var selectedMode;
@@ -47,5 +70,7 @@ class Chord extends Component {
     );
   }
 }
+
+// Chord = connect(this.mapStateToProps, this.mapDispatchToProps)(Chord)
 
 export default Chord;

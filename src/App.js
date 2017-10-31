@@ -10,8 +10,8 @@ class App extends Component {
       <div className="App">
         <NavbarContainer />
 
-        <ChordGrid />
-        
+        <ChordGrid store={this.props.store} />
+
       </div>
     );
   }
