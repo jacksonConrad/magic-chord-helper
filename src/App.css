@@ -44,17 +44,21 @@
       background-color: inherit; }
       .chord-grid .chord .mode-selector .major {
         height: 50%;
-        border: solid 1px black;
+        border-bottom: solid 1px black;
+        border-left: solid 1px black;
         padding: 5px;
         background-color: white; }
         .chord-grid .chord .mode-selector .major.selected {
           border: none;
-          background-color: inherit; }
+          background-color: inherit;
+          box-shadow: 2px 2px 5px #888888; }
       .chord-grid .chord .mode-selector .minor {
         height: 50%;
-        border: solid 1px black;
+        border-top: solid 1px black;
+        border-left: solid 1px black;
         padding: 5px;
         background-color: white; }
         .chord-grid .chord .mode-selector .minor.selected {
           border: none;
-          background-color: inherit; }
+          background-color: inherit;
+          box-shadow: 2px 2px 5px #888888; }

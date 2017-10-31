@@ -13,7 +13,7 @@ class Chord extends Component {
 
   handleClick() {
     var active;
-    if (this.state.active == 'active') {
+    if (this.state.active === 'active') {
       active = '';
     } else {
       active = 'active';
@@ -23,10 +23,16 @@ class Chord extends Component {
 
   selectMajor(e) {
     this.setState({mode: 'major'});
+    if (this.state.active != 'active') {
+      this.setState({active: 'active'});
+    }
   }
 
   selectMinor(e) {
     this.setState({mode: 'minor'});
+    if (this.state.active != 'active') {
+      this.setState({active: 'active'});
+    }
   }
 
   render() {
