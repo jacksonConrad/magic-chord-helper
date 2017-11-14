@@ -1,12 +1,12 @@
-// const defaultState = {
-//   chords: [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ],
-//   tonic: null,
-//   chordsInKey: [],
-//   selectedChords: [],
-//   nominatedChords: []
-// }
+const initial = {
+  chords: [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ],
+  tonic: null,
+  chordsInKey: [],
+  selectedChords: [],
+  nominatedChords: []
+}
 
-const chordGrid = (state, action) => {
+const ChordGrid = (state = initial, action) => {
   switch (action.type) {
     case 'ADD_CHORD':
       console.log('ADD_CHORD')
@@ -22,45 +22,14 @@ const chordGrid = (state, action) => {
 
     case 'REMOVE_CHORD':
       console.log('REMOVE_CHORD')
-      let newChords = state.selectedChords.splice(state.selectedChords.indexOf(action.chord), 1)
-      // console.log(chords)
-      // console.log(newChords)
-      // return state.map(todo =>
-      //   (todo.id === action.id)
-      //     ? {...todo, completed: !todo.completed}
-      //     : todo
-      // )
-
-      // return {
-      //   ...state,
-      //   selectedChords: chords
-      // }
-
-      return state
-
-      // return [
-      //   ...state,
-      //   {
-      //     selectedChords: state.selectedChords.splice(state.selectedChords.indexOf(action.chord), 1)
-      //   }
-      // ]
-    // case 'REMOVE_MULTIPLE_CHORDS':
-      // return state.map(chord =>
-      //   ()
-      // )
+      let nextChords = state.selectedChords.filter(element => element !== action.chord)
+      return {
+        ...state,
+        selectedChords: nextChords
+      }
     default:
       return state
   }
 }
 
-export default chordGrid
-
-
-
-// export default {
-//   chords: [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ],
-//   tonic: null,
-//   chordsInKey: [],
-//   selectedChords: [],
-//   nominatedChords: []
-// }
+export default ChordGrid

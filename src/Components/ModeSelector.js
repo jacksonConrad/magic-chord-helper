@@ -7,7 +7,6 @@ class ModeSelector extends Component {
 
   render() {
     const mode = this.props.mode;
-    console.log(mode);
     return (
       <div className="mode-selector">
         <div className='major selected' onClick={this.props.selectMode('major')}>M</div>

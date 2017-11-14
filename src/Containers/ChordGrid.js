@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { Grid, Row, Col } from 'react-bootstrap'
 import { addChord, removeChord } from '../Actions'
 import Chord from '../Components/Chord.js'
@@ -7,16 +6,39 @@ import Chord from '../Components/Chord.js'
 class ChordGrid extends Component {
   constructor(props) {
     super(props)
-    // this.state = {
-    //   chords: [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ],
-    //   tonic: null,
-    //   chordsInKey: []
-    // }
-    // this.props.store.subscribe(this.handleChordChange)
-    // console.log(this.props)
+    this.state = {
+      allChords: [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ],
+      tonic: null,
+      chords: {
+        'a' : 0,
+        'a#' : 1,
+        'b' : 2,
+        'c' : 3,
+        'c#' : 4,
+        'd' : 5,
+        'd#' : 6,
+        'e' : 7,
+        'f' : 8,
+        'f#' : 9,
+        'g' : 10,
+        'g#' : 11
+      },
+      modeMap: {'0': null, '1': 'major', '2': 'minor', '3': 'diminished'},
+      chordsInKey: [],
+      selectedChords: [0,0,0,0,0,0,0,0,0,0,0,0],
+      suggestedChords: []
+    }
   }
 
-  computeIntervalsFromRoot(tonic) {
+  componentWillMount = () => {
+    this.suggestChords()
+  }
+
+  componentWillUpdate = () => {
+    this.suggestChords()
+  }
+
+  computeIntervalsFromRoot = (tonic) => {
     const major = 'major'
     const minor = 'minor'
     const diminished = 'diminished'
@@ -59,129 +81,182 @@ class ChordGrid extends Component {
 
     let resultChords = chordRootsInKey();
     resultChords = populateChordResults(resultChords)
-    // console.log(logNotes)
-    // console.log(resultChords)
+    console.log(logNotes)
+    console.log(resultChords)
     return resultChords
   }
 
 
-  computeKeysFromChord = (chord) => {
-    if ( chord === null ) {
-      return false
-    }
-    const chordMap = [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
-//      [ a ] [ a#] [ b ] [ c ] [ c#] [ d ] [ d#] [ e ] [ f ] [ f#] [ g ] [ g#]
-// [ a ]  1     0     2     0     2     1     0     1     0     2     0     3
-// [ a#]  3     1     0     2     0     2     1     0     1     0     2     0
-// [ b ]  0     3     1     0     2     0     2     1     0     1     0     2
-// [ c ]  2     0     3     1     0     2     0     2     1     0     1     0
-// [ c#]  0     2     0     3     1     0     2     0     2     1     0     1
-// [ d ]  1     0     2     0     3     1     0     2     0     2     1     0
-// [ d#]  0     1     0     2     0     3     1     0     2     0     2     1
-// [ e ]  1     0     1     0     2     0     3     1     0     2     0     2
-// [ f ]  2     1     0     1     0     2     0     3     1     0     2     0
-// [ f#]  0     2     1     0     1     0     2     0     3     1     0     2
-// [ g ]  2     0     2     1     0     1     0     2     0     3     1     0
-// [ g#]  0     2     0     2     1     0     1     0     2     0     3     1
-    const chordMatrix = [ [ 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3 ],
-                          [ 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0 ],
-                          [ 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2 ],
-                          [ 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0 ],
-                          [ 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1 ],
-                          [ 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0 ],
-                          [ 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1 ],
-                          [ 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2 ],
-                          [ 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0 ],
-                          [ 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2 ],
-                          [ 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0 ],
-                          [ 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1 ] ]
-
-    const traverseMatrixForChords = (chord) => {
-      let chordIndex = chordMap.indexOf(chord)
-      let majorChords = []
-      let minorChords = []
-
-      let chordsInKeyOf = chordMatrix[chordIndex]
-
-      let keysInWhichChordAppears = []
-      for ( var i = 0; i < chordMatrix.length; i++ ) {
-        keysInWhichChordAppears.push(chordMatrix[i][chordIndex])
-      }
-      return [ chordsInKeyOf, keysInWhichChordAppears ]
-    }
-
-    const mapMatrixResultToChords = (chords) => {
-      const modes = [null, 'major', 'minor', 'diminished']
-      var response = []
-
-      for ( var i = 0; i < chords.length; i++ ) {
-        for ( var j = 0; j < chords[i].length; j++ ) {
-          if ( chords[i][j] === 0 ) {
-            continue;
-          } else {
-            response.push({chord: chordMap[j], mode: modes[chords[i][j]]} )
-          }
-        }
-
-      }
-      return response
-    }
-
-    // this.setState({ chordsInKey: mapMatrixResultToChords(traverseMatrixForChords(chord)) })
-
-  }
-
+//   computeKeysFromChord = (chord) => {
+//     if ( chord === null ) {
+//       return false
+//     }
+//     const chordMap = [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
+// //      [ a ] [ a#] [ b ] [ c ] [ c#] [ d ] [ d#] [ e ] [ f ] [ f#] [ g ] [ g#]
+// // [ a ]  1     0     2     0     2     1     0     1     0     2     0     3
+// // [ a#]  3     1     0     2     0     2     1     0     1     0     2     0
+// // [ b ]  0     3     1     0     2     0     2     1     0     1     0     2
+// // [ c ]  2     0     3     1     0     2     0     2     1     0     1     0
+// // [ c#]  0     2     0     3     1     0     2     0     2     1     0     1
+// // [ d ]  1     0     2     0     3     1     0     2     0     2     1     0
+// // [ d#]  0     1     0     2     0     3     1     0     2     0     2     1
+// // [ e ]  1     0     1     0     2     0     3     1     0     2     0     2
+// // [ f ]  2     1     0     1     0     2     0     3     1     0     2     0
+// // [ f#]  0     2     1     0     1     0     2     0     3     1     0     2
+// // [ g ]  2     0     2     1     0     1     0     2     0     3     1     0
+// // [ g#]  0     2     0     2     1     0     1     0     2     0     3     1
+//     const chordMatrix = [ [ 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3 ],
+//                           [ 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0 ],
+//                           [ 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2 ],
+//                           [ 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0 ],
+//                           [ 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1 ],
+//                           [ 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0 ],
+//                           [ 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1 ],
+//                           [ 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2 ],
+//                           [ 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0 ],
+//                           [ 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2 ],
+//                           [ 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0 ],
+//                           [ 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1 ] ]
+//
+//     const traverseMatrixForChords = (chord) => {
+//       let chordIndex = chordMap.indexOf(chord)
+//       let majorChords = []
+//       let minorChords = []
+//
+//       let chordsInKeyOf = chordMatrix[chordIndex]
+//
+//       let keysInWhichChordAppears = []
+//       for ( var i = 0; i < chordMatrix.length; i++ ) {
+//         keysInWhichChordAppears.push(chordMatrix[i][chordIndex])
+//       }
+//       return [ chordsInKeyOf, keysInWhichChordAppears ]
+//     }
+//
+//     const mapMatrixResultToChords = (chords) => {
+//       const modes = [null, 'major', 'minor', 'diminished']
+//       var response = []
+//
+//       for ( var i = 0; i < chords.length; i++ ) {
+//         for ( var j = 0; j < chords[i].length; j++ ) {
+//           if ( chords[i][j] === 0 ) {
+//             continue;
+//           } else {
+//             response.push({chord: chordMap[j], mode: modes[chords[i][j]]} )
+//           }
+//         }
+//
+//       }
+//       return response
+//     }
+//
+//     // this.setState({ chordsInKey: mapMatrixResultToChords(traverseMatrixForChords(chord)) })
+//
+//   }
+//
+//
 
   handleChordChange = (chord) => {
-    let selectedChords = this.props.store.getState().selectedChords
-    if ( selectedChords.indexOf(chord) > -1 ) {
-        console.log('removing chord')
-        this.props.dispatch(removeChord(chord))
+    let selectedChords = this.state.selectedChords
+    let nextChords = selectedChords
+    let chordIndex = this.state.allChords.indexOf(chord)
+    if ( selectedChords[chordIndex] > 0 ) {
+        nextChords[chordIndex] = 0
     } else {
-        console.log('adding chord')
-        this.props.dispatch(addChord(chord))
+        nextChords[chordIndex] = 1
     }
-    console.log(this.props.store.getState().selectedChords)
+    this.setState({selectedChords: nextChords})
   }
 
+  suggestChords = () => {
+    console.log('suggesting chords...')
+    const chordMap = [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
+      //      [ a ] [ a#] [ b ] [ c ] [ c#] [ d ] [ d#] [ e ] [ f ] [ f#] [ g ] [ g#]
+      // [ a ]  1     0     2     0     2     1     0     1     0     2     0     3
+      // [ a#]  3     1     0     2     0     2     1     0     1     0     2     0
+      // [ b ]  0     3     1     0     2     0     2     1     0     1     0     2
+      // [ c ]  2     0     3     1     0     2     0     2     1     0     1     0
+      // [ c#]  0     2     0     3     1     0     2     0     2     1     0     1
+      // [ d ]  1     0     2     0     3     1     0     2     0     2     1     0
+      // [ d#]  0     1     0     2     0     3     1     0     2     0     2     1
+      // [ e ]  1     0     1     0     2     0     3     1     0     2     0     2
+      // [ f ]  2     1     0     1     0     2     0     3     1     0     2     0
+      // [ f#]  0     2     1     0     1     0     2     0     3     1     0     2
+      // [ g ]  2     0     2     1     0     1     0     2     0     3     1     0
+      // [ g#]  0     2     0     2     1     0     1     0     2     0     3     1
+      const chordMatrix = [ [ 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3 ],
+                              [ 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0 ],
+                              [ 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2 ],
+                              [ 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0 ],
+                              [ 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1 ],
+                              [ 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0 ],
+                              [ 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1 ],
+                              [ 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2 ],
+                              [ 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0 ],
+                              [ 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2 ],
+                              [ 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0 ],
+                              [ 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1 ] ]
 
-  mapStateToProps = (state) => {
-    return {
-      selectedChords: state.selectedChords
-    }
-  }
+      let selectedChords = this.state.selectedChords
 
-  mapDispatchToProps = () => {
-    return {
-      addChord: addChord
-    }
+      const traverseMatrixForChords = (chord) => {
+        let chordIndex = chordMap.indexOf(chord)
+        let majorChords = []
+        let minorChords = []
+
+        let chordsInKeyOf = chordMatrix[chordIndex]
+
+        let keysInWhichChordAppears = []
+        for ( var i = 0; i < chordMatrix.length; i++ ) {
+          keysInWhichChordAppears.push(chordMatrix[i][chordIndex])
+        }
+        return [ chordsInKeyOf, keysInWhichChordAppears ]
+      }
+
+      for (let i = 0; i < selectedChords.length; i++) {
+        console.log(`for chord: [${selectedChords[i]}]`)
+        // console.log(traverseMatrixForChords(selectedChords[i]))
+      }
+
+      {/*
+        chords in key of a : [1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3]
+        keys in which a app: [1, 3, 0, 2, 0, 1, 0, 1, 2, 0, 2, 0]
+
+        chords in key of b : [0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2]
+        keys in which b app: [2, 0, 1, 3, 0, 2, 0, 1, 0, 1, 2, 0]
+
+
+
+         */}
+        //
+        // const mapMatrixResultToChords = (chords) => {
+        //   const modes = [null, 'major', 'minor', 'diminished']
+        //   var response = []
+        //
+        //   for ( var i = 0; i < chords.length; i++ ) {
+        //     for ( var j = 0; j < chords[i].length; j++ ) {
+        //       if ( chords[i][j] === 0 ) {
+        //         continue;
+        //       } else {
+        //         response.push({chord: chordMap[j], mode: modes[chords[i][j]]} )
+        //       }
+        //     }
+        //
+        //   }
+        //   return response
+        // }
+        // this.setState({ chordsInKey: mapMatrixResultToChords(traverseMatrixForChords(chord)) })
   }
 
 
   render() {
+    // let intervalsFromRoot = this.computeIntervalsFromRoot(this.state.selectedChords[0] || null)
+    console.log(this.state.selectedChords)
 
-    this.findMode = (chord) => {
-      let mChords = []
-      let chordsInKey = this.state.chordsInKey
-      chordsInKey.map((chord) => {
-        if (chord.mode === 'minor') {
-          mChords.push(chord.chord)
-        }
-      })
-      if ( mChords.indexOf(chord) != -1 ) {
-        return 'minor'
-      } else {
-        return 'major'
-      }
-    }
-
-    let tempHardCodedChords = [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
-    const chordDisplay = tempHardCodedChords.map((chord, index) => {
-      // let active =
+    const chordDisplay = this.state.allChords.map((chord, index) => {
       return(
-        <Col xs={6} sm={4} md={3}>
+        <Col xs={6} sm={4} md={3} key={chord} >
           {/* <Chord className='chord' tonic={chord} active={this.activateChord(chord)} key={index} mode={this.findMode(chord)} handleChordChange={this.handleChordChange}/> */}
-          <Chord className='chord' tonic={chord} key={index} handleChordChange={this.handleChordChange}/>
+          <Chord className='chord' tonic={chord} active={false} handleChordChange={this.handleChordChange} mode='major'/>
         </Col>
       )
     })
@@ -197,7 +272,5 @@ class ChordGrid extends Component {
     );
   }
 }
-
-ChordGrid = connect(this.mapStateToProps)(ChordGrid)
 
 export default ChordGrid;
