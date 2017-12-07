@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 class MajorSelector extends Component {
-  constructor(props) {
-    super(props);
-    // this.handleClick = this.handleClick.bind(this);
-  }
 
   handleClick = (e) => {
     e.stopPropagation();
@@ -17,7 +13,6 @@ class MajorSelector extends Component {
       active = 'selected';
     }
     return (
-      // <div className={'major ' + active} onClick={ () => this.props.selectMode() }>M</div>
       <div className={'major mode-display ' + active} onClick={ this.handleClick }>Maj</div>
     )
   }

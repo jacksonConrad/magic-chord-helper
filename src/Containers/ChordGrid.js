@@ -24,7 +24,6 @@ class ChordGrid extends Component {
         'g' : 10,
         'g#' : 11
       },
-      modeMap: {'0': null, '1': 'major', '2': 'minor', '3': 'diminished'},
       chordsInKey: [],
       selectedChords: [0,0,0,0,0,0,0,0,0,0,0,0],
       suggestedChords: [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -40,7 +39,6 @@ class ChordGrid extends Component {
 
 
   suggestChords = () => {
-    const chordMap = [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
       //      [ a ] [ a#] [ b ] [ c ] [ c#] [ d ] [ d#] [ e ] [ f ] [ f#] [ g ] [ g#]
       // [ a ]  1     0     2     0     2     1     0     1     0     2     0     3
       // [ a#]  3     1     0     2     0     2     1     0     1     0     2     0
@@ -72,9 +70,7 @@ class ChordGrid extends Component {
       const selectedChords = this.state.selectedChords
 
       const calculateChordToKeyScores = () => {
-        let keys = [0,0,0,0,0,0,0,0,0,0,0,0]
         let keyScores = [0,0,0,0,0,0,0,0,0,0,0,0]
-        let chordResults = [[], [], [], [], [], [], [], [], [], [], []]
 
         for (let i = 0; i < selectedChords.length; i++) {
           if (compareChords(selectedChords, chordMatrix[i])) {
@@ -85,14 +81,12 @@ class ChordGrid extends Component {
       }
 
       const compareChords = (key1, key2) => {
-        let chordScores = [0,0,0,0,0,0,0,0,0,0,0,0]
-        let chordResults = [[], [], [], [], [], [], [], [], [], [], []]
         let potentialKey = false
         for (let i = 0; i < key1.length; i++) {
           // if the chord is selected
           if ( key1[i] > 0 && key1[i] === key2[i] ) {
             potentialKey = true
-          } else if (key1[i] > 0 && key2[i] != key1[i]) {
+          } else if (key1[i] > 0 && key2[i] !== key1[i]) {
           // } else if (key1[i] > 0 && key2[i] === 0) {
             // comparing against 0 to allow for maj/minor inversions
             potentialKey = false
@@ -126,8 +120,6 @@ class ChordGrid extends Component {
         var frequency = {};  // array of frequency.
         var maxFreq = 0;  // holds the max frequency.
         let mode
-        let strength
-        let chord
 
         for (var i in chordResults) {
             frequency[chordResults[i]] = (frequency[chordResults[i]] || 0) + 1; // increment frequency.
@@ -136,7 +128,6 @@ class ChordGrid extends Component {
                 mode = chordResults[i];          // update result.
             }
         }
-        strength = (mode / chordResults.length * 1.0)
         return mode
       }
 

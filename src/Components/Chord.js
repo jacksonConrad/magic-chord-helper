@@ -4,17 +4,17 @@ import MinorSelector from './MinorSelector.js'
 import DiminishedSelector from './DiminishedSelector.js'
 
 class Chord extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   handleClick = () => {
     let nextValue
     if (this.props.value > 0) {
       nextValue = 0
     } else if (this.props.value === 0) {
-      nextValue = this.props.suggestion === 0 ? 1 : this.props.suggestion
-      // nextValue = 1
+      if (this.props.suggestion === undefined || this.props.suggestion === 0) {
+        nextValue = 1
+      } else {
+        nextValue = this.props.suggestion
+      }
     }
     this.props.handleChordChange(this.props.tonic, nextValue)
   }
@@ -59,7 +59,7 @@ class Chord extends Component {
 
     return (
       <div className={classes} onClick={this.handleClick}>
-        <span class="chord-display">{this.props.displayChord}</span>
+        <span className="chord-display">{this.props.displayChord}</span>
         <div className='mode-selector'>
           <MajorSelector active={majorActive} selectMode={this.selectMajor} />
           <MinorSelector active={minorActive} selectMode={this.selectMinor} />
