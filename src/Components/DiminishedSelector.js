@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class MajorSelector extends Component {
+class DiminishedSelector extends Component {
   constructor(props) {
     super(props);
     // this.handleClick = this.handleClick.bind(this);
@@ -17,10 +17,9 @@ class MajorSelector extends Component {
       active = 'selected';
     }
     return (
-      // <div className={'major ' + active} onClick={ () => this.props.selectMode() }>M</div>
-      <div className={'major mode-display ' + active} onClick={ this.handleClick }>Maj</div>
+      <div className={'diminished ' + active } onClick={ this.handleClick }>Dim</div>
     )
   }
 }
 
-export default MajorSelector;
+export default DiminishedSelector;

@@ -29,14 +29,15 @@
 
 .chord-grid {
   display: flex;
-  // flex-wrap: wrap;
   flex-flow: row wrap;
   .chord {
+    display: flex;
     flex: 1;
     height: 200px;
     border: solid 2px black;
     border-radius: 5px;
     margin: 5px 0;
+    box-shadow: 2px 3px #999;
 
     &.active {
       background-color: limegreen;
@@ -50,14 +51,25 @@
       clear: both;
     }
 
+    .chord-display {
+      flex: 1;
+      justify-content: center;
+      align-self: center;
+      font-size: 3em;
+    }
+
     .mode-selector {
+      display: flex;
+      flex-direction: column;
       height: 100%;
+      width: 25%;
       float: right;
       background-color: inherit;
-      // border: solid 1px black;
       .major {
-        height: 50%;
-        border: solid 1px black;
+        width: 100%;
+        flex: 1;
+        border-left: solid 1px black;
+        border-bottom: solid 1px black;
         padding: 5px;
         background-color: white;
         &.selected {
@@ -66,8 +78,11 @@
         }
       }
       .minor {
-        height: 50%;
-        border: solid 1px black;
+        width: 100%;
+        flex: 1;
+        border-left: solid 1px black;
+        border-top: solid 1px black;
+        border-bottom: solid 1px black;
         padding: 5px;
         background-color: white;
         &.selected {
@@ -75,7 +90,37 @@
           background-color: inherit;
         }
       }
+      .diminished {
+        width: 100%;
+        flex: 1;
+        border-left: solid 1px black;
+        border-top: solid 1px black;
+        padding: 5px;
+        background-color: white;
+        &.selected {
+          border: none;
+          background-color: inherit;
+        }
+      }
+      .mode-display {
+        flex: 1;
+        justify-content: center;
+        align-self: center;
+      }
     }
 
   }
+}
+
+.plain-link {
+  text-decoration: none;
+  color: inherit;
+  &:hover {
+    // text-decoration: none;
+    color: inherit;
+  }
+}
+
+.footer {
+  margin: 3em;
 }

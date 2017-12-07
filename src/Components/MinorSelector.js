@@ -17,7 +17,7 @@ class MinorSelector extends Component {
       active = 'selected';
     }
     return (
-      <div className={'minor ' + active } onClick={ this.handleClick }>m</div>
+      <div className={'minor ' + active } onClick={ this.handleClick }>Min</div>
     )
   }
 }

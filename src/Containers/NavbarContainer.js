@@ -12,7 +12,7 @@ class NavbarContainer extends Component {
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
-          <Nav>
+          {/* <Nav>
             <NavItem eventKey={1} href="/">Link</NavItem>
             <NavItem eventKey={2} href="/">Link</NavItem>
             <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
@@ -24,9 +24,9 @@ class NavbarContainer extends Component {
             </NavDropdown>
           </Nav>
           <Nav pullRight>
-            <NavItem eventKey={1} href="/">Link Right</NavItem>
+            <NavItem eventKey={1} href="https://github.com/joeldmikk/songer-react">Source</NavItem>
             <NavItem eventKey={2} href="/">Sign In</NavItem>
-          </Nav>
+          </Nav> */}
         </Navbar.Collapse>
       </Navbar>
     );

@@ -8,6 +8,7 @@ class ChordGrid extends Component {
     super(props)
     this.state = {
       allChords: [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ],
+      displayChords: ['A', 'B\u266D', 'B', 'C', 'C\u266F', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'G\u266F'],
       tonic: null,
       chords: {
         'a' : 0,
@@ -30,70 +31,15 @@ class ChordGrid extends Component {
     }
   }
 
-  componentWillMount = () => {
-    this.suggestChords()
-  }
-
-  componentWillUpdate = () => {
-    this.suggestChords()
-  }
-
-  computeIntervalsFromRoot = (tonic) => {
-    const major = 'major'
-    const minor = 'minor'
-    const diminished = 'diminished'
-    const chords =    [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
-    const labels =    [ 'I', 'ii', 'iii', 'IV', 'V', 'vi', 'vi' ]
-    const modes =      [ major, minor, minor, major, major, minor, diminished ]
-    const intervals = [ 0, 2, 2, 1, 2, 2, 2 ]
-
-    // for A major, it would be:
-    // [A, B, C#, D, E, F#, G#];
-    // [ I, ii, iii, IV, V, vi, vii]
-    // [ A, Bm, C#m, D, E, F#m, G#dim ]
-
-    // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    // [4, 5, 6, 7, 8, 9, 0, 1, 2, 3]
-
-    let logNotes = {}
-    logNotes.tonic = tonic
-
-    let indexOfTonic = chords.indexOf(tonic)
-    logNotes.indexOfTonic = indexOfTonic
-
-    const chordRootsInKey = () => {
-      let resultsChords = []
-      let chordIndex = indexOfTonic
-      for (var i = 0; i < intervals.length; i++) {
-        chordIndex += intervals[i]
-        resultsChords.push(chords[chordIndex % chords.length])
-      }
-      return resultsChords;
-    }
-
-    const populateChordResults = (chordsForCurrentKey) => {
-      var populatedResponse = []
-      for ( var i = 0; i < chordsForCurrentKey.length; i++ ) {
-        populatedResponse.push({ chord: chordsForCurrentKey[i], mode: modes[i], label: labels[i] })
-      }
-      return populatedResponse
-    }
-
-    let resultChords = chordRootsInKey();
-    resultChords = populateChordResults(resultChords)
-    return resultChords
-  }
-
   handleChordChange = (chord, value) => {
     let nextChords = this.state.selectedChords
     let chordIndex = this.state.allChords.indexOf(chord)
     nextChords[chordIndex] = value
-    this.setState({selectedChords: nextChords})
+    this.setState({selectedChords: nextChords, suggestedChords: this.suggestChords()})
   }
 
 
   suggestChords = () => {
-    console.log('suggesting chords...')
     const chordMap = [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
       //      [ a ] [ a#] [ b ] [ c ] [ c#] [ d ] [ d#] [ e ] [ f ] [ f#] [ g ] [ g#]
       // [ a ]  1     0     2     0     2     1     0     1     0     2     0     3
@@ -146,7 +92,8 @@ class ChordGrid extends Component {
           // if the chord is selected
           if ( key1[i] > 0 && key1[i] === key2[i] ) {
             potentialKey = true
-          } else if (key1[i] > 0 && key2[i] === 0) {
+          } else if (key1[i] > 0 && key2[i] != key1[i]) {
+          // } else if (key1[i] > 0 && key2[i] === 0) {
             // comparing against 0 to allow for maj/minor inversions
             potentialKey = false
             break
@@ -170,35 +117,47 @@ class ChordGrid extends Component {
       const reduceChordResults = (chordResults) => {
         let chordSuggestions = [[], [], [], [], [], [], [], [], [], [], [], []]
         for (let i = 0; i < chordResults.length; i++) {
-          console.log(chordResults[i])
+          chordSuggestions[i] = calculateSuggestionStrength(chordResults[i])
         }
+        return chordSuggestions
       }
 
-      {/*
-        chords in key of a : [1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3]
-        keys in which a app: [1, 3, 0, 2, 0, 1, 0, 1, 2, 0, 2, 0]
+      const calculateSuggestionStrength = (chordResults) => {
+        var frequency = {};  // array of frequency.
+        var maxFreq = 0;  // holds the max frequency.
+        let mode
+        let strength
+        let chord
 
-        chords in key of b : [0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2]
-        keys in which b app: [2, 0, 1, 3, 0, 2, 0, 1, 0, 1, 2, 0]
-      */}
+        for (var i in chordResults) {
+            frequency[chordResults[i]] = (frequency[chordResults[i]] || 0) + 1; // increment frequency.
+            if (frequency[chordResults[i]] > maxFreq) { // is this frequency > max so far ?
+                maxFreq = frequency[chordResults[i]];  // update max.
+                mode = chordResults[i];          // update result.
+            }
+        }
+        strength = (mode / chordResults.length * 1.0)
+        return mode
+      }
 
-      // console.log(calculateChordToKeyScores())
       let keyScores = calculateChordToKeyScores()
       let chordResults = mergeKeyScores(keyScores)
       let suggestions = reduceChordResults(chordResults)
+      return suggestions
   }
 
 
   render() {
-    // console.log(this.state.selectedChords)
     const chordDisplay = this.state.allChords.map((chord, index) => {
       return(
         <Col xs={6} sm={4} md={3} key={chord} >
           <Chord
             className='chord'
             tonic={chord}
+            displayChord={this.state.displayChords[index]}
             handleChordChange={this.handleChordChange}
             value={this.state.selectedChords[index]}
+            suggestion={this.state.suggestedChords[index]}
           />
         </Col>
       )
