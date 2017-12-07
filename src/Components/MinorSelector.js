@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 class MinorSelector extends Component {
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
+    // this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(e) {
+  handleClick = (e) => {
     e.stopPropagation();
     this.props.selectMode();
   }

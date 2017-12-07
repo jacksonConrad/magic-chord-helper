@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Grid, Row, Col } from 'react-bootstrap'
-import { addChord, removeChord } from '../Actions'
+// import { addChord, removeChord } from '../Actions'
 import Chord from '../Components/Chord.js'
 
 class ChordGrid extends Component {
@@ -81,98 +81,16 @@ class ChordGrid extends Component {
 
     let resultChords = chordRootsInKey();
     resultChords = populateChordResults(resultChords)
-    console.log(logNotes)
-    console.log(resultChords)
     return resultChords
   }
 
-
-//   computeKeysFromChord = (chord) => {
-//     if ( chord === null ) {
-//       return false
-//     }
-//     const chordMap = [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ]
-// //      [ a ] [ a#] [ b ] [ c ] [ c#] [ d ] [ d#] [ e ] [ f ] [ f#] [ g ] [ g#]
-// // [ a ]  1     0     2     0     2     1     0     1     0     2     0     3
-// // [ a#]  3     1     0     2     0     2     1     0     1     0     2     0
-// // [ b ]  0     3     1     0     2     0     2     1     0     1     0     2
-// // [ c ]  2     0     3     1     0     2     0     2     1     0     1     0
-// // [ c#]  0     2     0     3     1     0     2     0     2     1     0     1
-// // [ d ]  1     0     2     0     3     1     0     2     0     2     1     0
-// // [ d#]  0     1     0     2     0     3     1     0     2     0     2     1
-// // [ e ]  1     0     1     0     2     0     3     1     0     2     0     2
-// // [ f ]  2     1     0     1     0     2     0     3     1     0     2     0
-// // [ f#]  0     2     1     0     1     0     2     0     3     1     0     2
-// // [ g ]  2     0     2     1     0     1     0     2     0     3     1     0
-// // [ g#]  0     2     0     2     1     0     1     0     2     0     3     1
-//     const chordMatrix = [ [ 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3 ],
-//                           [ 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0 ],
-//                           [ 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0, 2 ],
-//                           [ 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1, 0 ],
-//                           [ 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0, 1 ],
-//                           [ 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1, 0 ],
-//                           [ 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2, 1 ],
-//                           [ 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0, 2 ],
-//                           [ 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2, 0 ],
-//                           [ 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0, 2 ],
-//                           [ 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1, 0 ],
-//                           [ 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3, 1 ] ]
-//
-//     const traverseMatrixForChords = (chord) => {
-//       let chordIndex = chordMap.indexOf(chord)
-//       let majorChords = []
-//       let minorChords = []
-//
-//       let chordsInKeyOf = chordMatrix[chordIndex]
-//
-//       let keysInWhichChordAppears = []
-//       for ( var i = 0; i < chordMatrix.length; i++ ) {
-//         keysInWhichChordAppears.push(chordMatrix[i][chordIndex])
-//       }
-//       return [ chordsInKeyOf, keysInWhichChordAppears ]
-//     }
-//
-//     const mapMatrixResultToChords = (chords) => {
-//       const modes = [null, 'major', 'minor', 'diminished']
-//       var response = []
-//
-//       for ( var i = 0; i < chords.length; i++ ) {
-//         for ( var j = 0; j < chords[i].length; j++ ) {
-//           if ( chords[i][j] === 0 ) {
-//             continue;
-//           } else {
-//             response.push({chord: chordMap[j], mode: modes[chords[i][j]]} )
-//           }
-//         }
-//
-//       }
-//       return response
-//     }
-//
-//     // this.setState({ chordsInKey: mapMatrixResultToChords(traverseMatrixForChords(chord)) })
-//
-//   }
-//
-//
-
-  handleChordChange = (chord) => {
-    let selectedChords = this.state.selectedChords
-    let nextChords = selectedChords
+  handleChordChange = (chord, value) => {
+    let nextChords = this.state.selectedChords
     let chordIndex = this.state.allChords.indexOf(chord)
-    if ( selectedChords[chordIndex] > 0 ) {
-        nextChords[chordIndex] = 0
-    } else {
-        nextChords[chordIndex] = 1
-    }
+    nextChords[chordIndex] = value
     this.setState({selectedChords: nextChords})
   }
 
-  /*
-    * suggestChords
-      - loop matrix and...
-    * calculateChordToKeyStrength
-    *
-  */
 
   suggestChords = () => {
     console.log('suggesting chords...')
@@ -210,57 +128,51 @@ class ChordGrid extends Component {
       const calculateChordToKeyScores = () => {
         let keys = [0,0,0,0,0,0,0,0,0,0,0,0]
         let keyScores = [0,0,0,0,0,0,0,0,0,0,0,0]
+        let chordResults = [[], [], [], [], [], [], [], [], [], [], []]
 
         for (let i = 0; i < selectedChords.length; i++) {
-          keyScores[i] = compareChords(selectedChords, chordMatrix[i])
+          if (compareChords(selectedChords, chordMatrix[i])) {
+            keyScores[i] = chordMatrix[i]
+          }
         }
-
         return keyScores
       }
 
       const compareChords = (key1, key2) => {
         let chordScores = [0,0,0,0,0,0,0,0,0,0,0,0]
+        let chordResults = [[], [], [], [], [], [], [], [], [], [], []]
+        let potentialKey = false
         for (let i = 0; i < key1.length; i++) {
           // if the chord is selected
-          if ( key1[i] === key2[i] ) {
-            if ( key1[i] > 0 || key2[i] < 0 ) {
-              chordScores[i] = 1
-            } else {
-              chordScores[i] = 0.3
-            }
-
+          if ( key1[i] > 0 && key1[i] === key2[i] ) {
+            potentialKey = true
+          } else if (key1[i] > 0 && key2[i] === 0) {
+            // comparing against 0 to allow for maj/minor inversions
+            potentialKey = false
+            break
           }
         }
-        return ( chordScores.reduce(function(a, b) { return a + b; }) / chordScores.length )
+        return potentialKey
       }
 
-      const getTopKeyFromScore = (keyScores) => {
-        let maxScore =  keyScores.reduce(function(a, b) {
-                          return Math.max(a, b);
-                        })
-        let maxKeyIndex = keyScores.indexOf(maxScore)
-        let key = chordMap[maxKeyIndex]
-        return
-      }
-
-
-      const chordsInKey = () => {
-        let keys = [0,0,0,0,0,0,0,0,0,0,0,0]
-        for (let i = 0; i < selectedChords.length; i++) {
-          // if the chord is selected
-          if ( selectedChords[i] > 0 ) {
-            // then iterate through the chordMatrix...
-            for (let j = 0; j < selectedChords.length; j++) {
-              // when we find
-              if (selectedChords[i] === chordMatrix[j][i]) {
-                keys[j] = 1
-              }
+      const mergeKeyScores = (keyScores) => {
+        let chordResults = [[], [], [], [], [], [], [], [], [], [], [], []]
+        for (let i = 0; i < keyScores.length; i++) {
+          if (keyScores[i].length) {
+            for (let j = 0; j < keyScores[i].length; j++) {
+              chordResults[j] = chordResults[j].concat(keyScores[i][j])
             }
           }
         }
-        return keys
+        return chordResults
       }
 
+      const reduceChordResults = (chordResults) => {
+        let chordSuggestions = [[], [], [], [], [], [], [], [], [], [], [], []]
+        for (let i = 0; i < chordResults.length; i++) {
+          console.log(chordResults[i])
+        }
+      }
 
       {/*
         chords in key of a : [1, 0, 2, 0, 2, 1, 0, 1, 0, 2, 0, 3]
@@ -270,18 +182,24 @@ class ChordGrid extends Component {
         keys in which b app: [2, 0, 1, 3, 0, 2, 0, 1, 0, 1, 2, 0]
       */}
 
-      console.log(calculateChordToKeyScores())
+      // console.log(calculateChordToKeyScores())
       let keyScores = calculateChordToKeyScores()
-      getTopKeyFromScore(keyScores)
-
+      let chordResults = mergeKeyScores(keyScores)
+      let suggestions = reduceChordResults(chordResults)
   }
 
 
   render() {
+    // console.log(this.state.selectedChords)
     const chordDisplay = this.state.allChords.map((chord, index) => {
       return(
         <Col xs={6} sm={4} md={3} key={chord} >
-          <Chord className='chord' tonic={chord} active={false} handleChordChange={this.handleChordChange} mode='major'/>
+          <Chord
+            className='chord'
+            tonic={chord}
+            handleChordChange={this.handleChordChange}
+            value={this.state.selectedChords[index]}
+          />
         </Col>
       )
     })
