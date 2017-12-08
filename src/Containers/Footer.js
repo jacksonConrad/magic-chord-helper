@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Well } from 'react-bootstrap'
+import { Panel } from 'react-bootstrap'
 
 class Footer extends Component {
 
@@ -9,12 +9,21 @@ class Footer extends Component {
   }
 
   render() {
+    const footer =  <div>
+                      <a href='https://github.com/joeldmikk/songer-react' className="plain-link">SOURCE</a>&nbsp;&nbsp;\\&nbsp;&nbsp;
+                      <a href='https://en.wikipedia.org/wiki/Circle_of_fifths' className="plain-link">CIRCLE OF FIFTHS</a>&nbsp;&nbsp;\\&nbsp;&nbsp;
+                      <a href='http://www.joelmikkelsen.com/' className="plain-link">&copy; 2017</a>
+                    </div>
+
     return (
-      <Well className='footer'>
-        <a href='https://github.com/joeldmikk/songer-react' className="plain-link">Source Code</a>&nbsp;&nbsp;//&nbsp;&nbsp;
-        <a href='https://en.wikipedia.org/wiki/Circle_of_fifths' className="plain-link">Circle of Fifths</a>&nbsp;&nbsp;//&nbsp;&nbsp;
-        <a href='http://www.joelmikkelsen.com/' className="plain-link">&copy; Joel Mikkelsen, 2017</a><br/>
-      </Well>
+    <div>
+      <Panel className='footer' footer={footer}>
+        <div className='color-swatches-wrap'>
+          <div class="green swatch"></div>SELECTED
+          <div class="yellow swatch"></div>SUGGESTED
+        </div>
+      </Panel>
+    </div>
     )
   }
 }

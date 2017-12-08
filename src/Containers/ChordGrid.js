@@ -9,22 +9,6 @@ class ChordGrid extends Component {
     this.state = {
       allChords: [ 'a', 'a#', 'b', 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#' ],
       displayChords: ['A', 'B\u266D', 'B', 'C', 'C\u266F', 'D', 'E\u266D', 'E', 'F', 'F\u266F', 'G', 'G\u266F'],
-      tonic: null,
-      chords: {
-        'a' : 0,
-        'a#' : 1,
-        'b' : 2,
-        'c' : 3,
-        'c#' : 4,
-        'd' : 5,
-        'd#' : 6,
-        'e' : 7,
-        'f' : 8,
-        'f#' : 9,
-        'g' : 10,
-        'g#' : 11
-      },
-      chordsInKey: [],
       selectedChords: [0,0,0,0,0,0,0,0,0,0,0,0],
       suggestedChords: [0,0,0,0,0,0,0,0,0,0,0,0]
     }

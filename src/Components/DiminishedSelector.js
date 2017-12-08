@@ -13,7 +13,7 @@ class DiminishedSelector extends Component {
       active = 'selected';
     }
     return (
-      <div className={'diminished ' + active } onClick={ this.handleClick }>Dim</div>
+      <div className={'diminished mode-display ' + active } onClick={ this.handleClick }>Dim</div>
     )
   }
 }

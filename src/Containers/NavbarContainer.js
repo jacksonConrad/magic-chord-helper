@@ -7,7 +7,7 @@ class NavbarContainer extends Component {
       <Navbar inverse collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="/">Magic Chord Helper</a>
+            <a href="/">MAGIC CHORD HELPER</a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
