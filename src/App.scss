@@ -1,6 +1,8 @@
 $green: #2ECC40;
 $limegreen: #01FF70;
 $yellow: #FFDC00;
+$green1: #42CC52;
+$white: #FFFFFF;
 
 .App {
   text-align: center;
@@ -15,32 +17,48 @@ $yellow: #FFDC00;
     display: flex;
     flex: 1;
     height: 200px;
-    border: solid 2px black;
+    border: solid 2px $white;
     border-radius: 5px;
     margin: 5px 0;
-    background-color: #fff;
+    background-color: transparent;
     box-shadow: 2px 3px #444;
-
-    &.active {
-      background-color: $green;
-    }
-
-    &.suggested {
-      background-color: $yellow;
+    &:hover {
+      border: solid 2px #FFF;
     }
 
     &::after {
       clear: both;
     }
 
+    .chord-background {
+      flex:3;
+      display: flex;
+      &:hover {
+        font-size: 1.1em;
+      }
+
+      &.active {
+        background-color: $green1;
+        font-weight: bold;
+      }
+
+      &.suggested {
+        background-color: $yellow;
+        font-weight: bold;
+      }
+    }
+
     .chord-display {
       flex: 1;
       justify-content: center;
       align-self: center;
-      font-size: 3em;
+      font-size: 4em;
+      // font-weight: bold;
+      color: $white;
     }
 
     .mode-selector {
+      flex: 1;
       display: flex;
       flex-direction: column;
       height: 100%;
@@ -51,40 +69,59 @@ $yellow: #FFDC00;
         width: 100%;
         display: flex;
         flex: 1;
-        border-left: solid 1px black;
-        border-bottom: solid 1px black;
+        border-left: solid 1px $white;
+        border-bottom: solid 1px $white;
         padding: 5px;
-        background-color: white;
+        background-color: transparent;
         &.selected {
           border: none;
-          background-color: inherit;
+          font-weight: bold;
+          &.active {
+            background-color: $green1;
+          }
+
+          &.suggested {
+            background-color: $yellow;
+          }
         }
       }
       .minor {
         width: 100%;
         display: flex;
         flex: 1;
-        border-left: solid 1px black;
-        border-top: solid 1px black;
-        border-bottom: solid 1px black;
+        border-left: solid 1px $white;
+        border-top: solid 1px $white;
+        border-bottom: solid 1px $white;
         padding: 5px;
-        background-color: white;
+        background-color: transparent;
         &.selected {
           border: none;
-          background-color: inherit;
+          font-weight: bold;
+          &.active {
+            background-color: $green1;
+          }
+          &.suggested {
+            background-color: $yellow;
+          }
         }
       }
       .diminished {
         width: 100%;
         display: flex;
         flex: 1;
-        border-left: solid 1px black;
-        border-top: solid 1px black;
+        border-left: solid 1px $white;
+        border-top: solid 1px $white;
         padding: 5px;
-        background-color: white;
+        background-color: transparent;
         &.selected {
           border: none;
-          background-color: inherit;
+          font-weight: bold;
+          &.active {
+            background-color: $green1;
+          }
+          &.suggested {
+            background-color: $yellow;
+          }
         }
       }
       .mode-display {
@@ -92,6 +129,7 @@ $yellow: #FFDC00;
         flex-direction: column;
         justify-content: center;
         align-self: center;
+        color: $white;
       }
     }
 

@@ -13,7 +13,7 @@ class MinorSelector extends Component {
       active = 'selected';
     }
     return (
-      <div className={'minor mode-display ' + active } onClick={ this.handleClick }>Min</div>
+      <div className={'minor mode-display ' + active + " " + this.props.classes } onClick={ this.handleClick }>Min</div>
     )
   }
 }

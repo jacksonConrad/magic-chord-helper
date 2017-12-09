@@ -45,12 +45,15 @@ class Chord extends Component {
   }
 
   render() {
-    var classes = "chord "
+    var classes = "chord-background "
+    let modeClasses = ""
 
     if (this.props.value > 0) {
       classes += "active "
+      modeClasses += "active "
     } else if (this.props.suggestion > 0) {
       classes += "suggested "
+      modeClasses += "suggested "
     }
 
     let majorActive = this.isModeActive('major')
@@ -58,12 +61,14 @@ class Chord extends Component {
     let diminishedActive = this.isModeActive('diminished')
 
     return (
-      <div className={classes} onClick={this.handleClick}>
-        <span className="chord-display">{this.props.displayChord}</span>
+      <div className="chord" onClick={this.handleClick}>
+        <div className={classes}>
+          <div className="chord-display"><span className="transparent-cutout">{this.props.displayChord}</span></div>
+        </div>
         <div className='mode-selector'>
-          <MajorSelector active={majorActive} selectMode={this.selectMajor} />
-          <MinorSelector active={minorActive} selectMode={this.selectMinor} />
-          <DiminishedSelector active={diminishedActive} selectMode={this.selectDiminished} />
+          <MajorSelector active={majorActive} selectMode={this.selectMajor} classes={modeClasses} />
+          <MinorSelector active={minorActive} selectMode={this.selectMinor} classes={modeClasses} />
+          <DiminishedSelector active={diminishedActive} selectMode={this.selectDiminished} classes={modeClasses} />
         </div>
       </div>
     );

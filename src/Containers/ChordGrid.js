@@ -127,7 +127,6 @@ class ChordGrid extends Component {
       return(
         <Col xs={6} sm={4} md={3} key={chord} >
           <Chord
-            className='chord'
             tonic={chord}
             displayChord={this.state.displayChords[index]}
             handleChordChange={this.handleChordChange}

@@ -13,7 +13,7 @@ class MajorSelector extends Component {
       active = 'selected';
     }
     return (
-      <div className={'major mode-display ' + active} onClick={ this.handleClick }>Maj</div>
+      <div className={'major mode-display ' + active + " " + this.props.classes} onClick={ this.handleClick }>Maj</div>
     )
   }
 }
