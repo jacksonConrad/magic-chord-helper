@@ -1,7 +1,5 @@
-$green: #2ECC40;
-$limegreen: #01FF70;
 $yellow: #FFDC00;
-$green1: #42CC52;
+$green: #42CC52;
 $white: #FFFFFF;
 
 .App {
@@ -38,7 +36,7 @@ $white: #FFFFFF;
       }
 
       &.active {
-        background-color: $green1;
+        background-color: $green;
         font-weight: bold;
       }
 
@@ -77,7 +75,7 @@ $white: #FFFFFF;
           border: none;
           font-weight: bold;
           &.active {
-            background-color: $green1;
+            background-color: $green;
           }
 
           &.suggested {
@@ -98,7 +96,7 @@ $white: #FFFFFF;
           border: none;
           font-weight: bold;
           &.active {
-            background-color: $green1;
+            background-color: $green;
           }
           &.suggested {
             background-color: $yellow;
@@ -117,7 +115,7 @@ $white: #FFFFFF;
           border: none;
           font-weight: bold;
           &.active {
-            background-color: $green1;
+            background-color: $green;
           }
           &.suggested {
             background-color: $yellow;

@@ -9,7 +9,6 @@ class NavbarContainer extends Component {
           <Navbar.Brand>
             <a href="/">MAGIC CHORD HELPER</a>
           </Navbar.Brand>
-          <Navbar.Toggle />
         </Navbar.Header>
       </Navbar>
     );
