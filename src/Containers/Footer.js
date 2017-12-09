@@ -20,6 +20,7 @@ class Footer extends Component {
       <Panel className='footer' footer={footer}>
         <div className='color-swatches-wrap'>
           <div class="green swatch"></div>SELECTED
+          &nbsp;&nbsp;\\&nbsp;&nbsp;
           <div class="yellow swatch"></div>SUGGESTED
         </div>
       </Panel>
