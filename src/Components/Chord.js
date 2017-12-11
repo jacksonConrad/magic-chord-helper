@@ -32,8 +32,6 @@ class Chord extends Component {
   }
 
   isModeActive = (mode) => {
-    // if the mode is selected, active is true
-    // if the mode is suggsted, active is true
     const modeMap = { 'major': 1, 'minor': 2, 'diminished': 3 }
     if (this.props.value === modeMap[mode]) {
       return true

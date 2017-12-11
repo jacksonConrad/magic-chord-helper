@@ -71,8 +71,6 @@ class ChordGrid extends Component {
           if ( key1[i] > 0 && key1[i] === key2[i] ) {
             potentialKey = true
           } else if (key1[i] > 0 && key2[i] !== key1[i]) {
-          // } else if (key1[i] > 0 && key2[i] === 0) {
-            // comparing against 0 to allow for maj/minor inversions
             potentialKey = false
             break
           }
@@ -101,15 +99,15 @@ class ChordGrid extends Component {
       }
 
       const calculateSuggestionStrength = (chordResults) => {
-        var frequency = {};  // array of frequency.
-        var maxFreq = 0;  // holds the max frequency.
+        var frequency = {};
+        var maxFreq = 0;
         let mode
 
         for (var i in chordResults) {
-            frequency[chordResults[i]] = (frequency[chordResults[i]] || 0) + 1; // increment frequency.
-            if (frequency[chordResults[i]] > maxFreq) { // is this frequency > max so far ?
-                maxFreq = frequency[chordResults[i]];  // update max.
-                mode = chordResults[i];          // update result.
+            frequency[chordResults[i]] = (frequency[chordResults[i]] || 0) + 1;
+            if (frequency[chordResults[i]] > maxFreq) {
+                maxFreq = frequency[chordResults[i]];
+                mode = chordResults[i];
             }
         }
         return mode
