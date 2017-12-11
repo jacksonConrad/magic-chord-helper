@@ -5,10 +5,15 @@ $white: #FFFFFF;
 .App {
   text-align: center;
   background-image: linear-gradient(-70deg, #001f3f, #85144b);
+  padding-top: 3em;
+  min-height: 100vh;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .chord-grid {
+  flex: 1 0 auto;
   display: flex;
   flex-flow: row wrap;
   .chord {
@@ -29,7 +34,7 @@ $white: #FFFFFF;
     }
 
     .chord-background {
-      flex:3;
+      flex: 3;
       display: flex;
       &:hover {
         font-size: 1.1em;
@@ -51,7 +56,6 @@ $white: #FFFFFF;
       justify-content: center;
       align-self: center;
       font-size: 4em;
-      // font-weight: bold;
       color: $white;
     }
 
@@ -142,19 +146,23 @@ $white: #FFFFFF;
   }
 }
 
-.footer {
-  margin: 3em;
-  .swatch {
-    height: 1em;
-    width: 1em;
-    border-radius: 50%;
-    display: inline-block;
-    margin: 0 5px -2px 5px;
-    &.green {
-      background-color: $green;
-    }
-    &.yellow {
-      background-color: $yellow;
+.footer-wrapper {
+  flex-shrink: 0;
+  .footer {
+    margin: 3em 2em;
+    color: $white;
+    .swatch {
+      height: 1em;
+      width: 1em;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 0 5px -2px 5px;
+      &.green {
+        background-color: $green;
+      }
+      &.yellow {
+        background-color: $yellow;
+      }
     }
   }
 }

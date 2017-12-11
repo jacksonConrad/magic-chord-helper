@@ -1,9 +1,14 @@
 .App {
   text-align: center;
   background-image: linear-gradient(-70deg, #001f3f, #85144b);
-  height: 100%; }
+  padding-top: 3em;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column; }
 
 .chord-grid {
+  flex: 1 0 auto;
   display: flex;
   flex-flow: row wrap; }
   .chord-grid .chord {
@@ -103,15 +108,18 @@
   .plain-link:hover {
     color: inherit; }
 
-.footer {
-  margin: 3em; }
-  .footer .swatch {
-    height: 1em;
-    width: 1em;
-    border-radius: 50%;
-    display: inline-block;
-    margin: 0 5px -2px 5px; }
-    .footer .swatch.green {
-      background-color: #42CC52; }
-    .footer .swatch.yellow {
-      background-color: #FFDC00; }
+.footer-wrapper {
+  flex-shrink: 0; }
+  .footer-wrapper .footer {
+    margin: 3em 2em;
+    color: #FFFFFF; }
+    .footer-wrapper .footer .swatch {
+      height: 1em;
+      width: 1em;
+      border-radius: 50%;
+      display: inline-block;
+      margin: 0 5px -2px 5px; }
+      .footer-wrapper .footer .swatch.green {
+        background-color: #42CC52; }
+      .footer-wrapper .footer .swatch.yellow {
+        background-color: #FFDC00; }
