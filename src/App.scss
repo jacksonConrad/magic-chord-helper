@@ -1,10 +1,15 @@
 $yellow: #FFDC00;
 $green: #42CC52;
 $white: #FFFFFF;
+$navy: #001f3f;
+$lightblue: #0064CB;
+$blue: #00458B;
+$yellow-bg: rgba(255,220,0,0.8);
+$green-bg: rgba(66,204,82,0.8);
 
 .App {
   text-align: center;
-  background-image: linear-gradient(-70deg, #001f3f, #85144b);
+  background-image: linear-gradient(-45deg, $blue, $navy);
   padding-top: 3em;
   min-height: 100vh;
   height: 100%;
@@ -41,12 +46,12 @@ $white: #FFFFFF;
       }
 
       &.active {
-        background-color: $green;
+        background-color: $green-bg;
         font-weight: bold;
       }
 
       &.suggested {
-        background-color: $yellow;
+        background-color: $yellow-bg;
         font-weight: bold;
       }
     }
@@ -79,11 +84,11 @@ $white: #FFFFFF;
           border: none;
           font-weight: bold;
           &.active {
-            background-color: $green;
+            background-color: $green-bg;
           }
 
           &.suggested {
-            background-color: $yellow;
+            background-color: $yellow-bg;
           }
         }
       }
@@ -100,10 +105,10 @@ $white: #FFFFFF;
           border: none;
           font-weight: bold;
           &.active {
-            background-color: $green;
+            background-color: $green-bg;
           }
           &.suggested {
-            background-color: $yellow;
+            background-color: $yellow-bg;
           }
         }
       }
@@ -119,10 +124,10 @@ $white: #FFFFFF;
           border: none;
           font-weight: bold;
           &.active {
-            background-color: $green;
+            background-color: $green-bg;
           }
           &.suggested {
-            background-color: $yellow;
+            background-color: $yellow-bg;
           }
         }
       }

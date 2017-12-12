@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-image: linear-gradient(-70deg, #001f3f, #85144b);
+  background-image: linear-gradient(-45deg, #00458B, #001f3f);
   padding-top: 3em;
   min-height: 100vh;
   height: 100%;
@@ -30,10 +30,10 @@
       .chord-grid .chord .chord-background:hover {
         font-size: 1.1em; }
       .chord-grid .chord .chord-background.active {
-        background-color: #42CC52;
+        background-color: rgba(66, 204, 82, 0.8);
         font-weight: bold; }
       .chord-grid .chord .chord-background.suggested {
-        background-color: #FFDC00;
+        background-color: rgba(255, 220, 0, 0.8);
         font-weight: bold; }
     .chord-grid .chord .chord-display {
       flex: 1;
@@ -61,9 +61,9 @@
           border: none;
           font-weight: bold; }
           .chord-grid .chord .mode-selector .major.selected.active {
-            background-color: #42CC52; }
+            background-color: rgba(66, 204, 82, 0.8); }
           .chord-grid .chord .mode-selector .major.selected.suggested {
-            background-color: #FFDC00; }
+            background-color: rgba(255, 220, 0, 0.8); }
       .chord-grid .chord .mode-selector .minor {
         width: 100%;
         display: flex;
@@ -77,9 +77,9 @@
           border: none;
           font-weight: bold; }
           .chord-grid .chord .mode-selector .minor.selected.active {
-            background-color: #42CC52; }
+            background-color: rgba(66, 204, 82, 0.8); }
           .chord-grid .chord .mode-selector .minor.selected.suggested {
-            background-color: #FFDC00; }
+            background-color: rgba(255, 220, 0, 0.8); }
       .chord-grid .chord .mode-selector .diminished {
         width: 100%;
         display: flex;
@@ -92,9 +92,9 @@
           border: none;
           font-weight: bold; }
           .chord-grid .chord .mode-selector .diminished.selected.active {
-            background-color: #42CC52; }
+            background-color: rgba(66, 204, 82, 0.8); }
           .chord-grid .chord .mode-selector .diminished.selected.suggested {
-            background-color: #FFDC00; }
+            background-color: rgba(255, 220, 0, 0.8); }
       .chord-grid .chord .mode-selector .mode-display {
         flex: 1;
         flex-direction: column;
