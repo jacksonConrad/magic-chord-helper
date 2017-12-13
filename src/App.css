@@ -33,7 +33,7 @@
         background-color: rgba(66, 204, 82, 0.8);
         font-weight: bold; }
       .chord-grid .chord .chord-background.suggested {
-        background-color: rgba(255, 220, 0, 0.8);
+        background-color: rgba(255, 220, 0, 0.9);
         font-weight: bold; }
     .chord-grid .chord .chord-display {
       flex: 1;
@@ -63,7 +63,7 @@
           .chord-grid .chord .mode-selector .major.selected.active {
             background-color: rgba(66, 204, 82, 0.8); }
           .chord-grid .chord .mode-selector .major.selected.suggested {
-            background-color: rgba(255, 220, 0, 0.8); }
+            background-color: rgba(255, 220, 0, 0.9); }
       .chord-grid .chord .mode-selector .minor {
         width: 100%;
         display: flex;
@@ -79,7 +79,7 @@
           .chord-grid .chord .mode-selector .minor.selected.active {
             background-color: rgba(66, 204, 82, 0.8); }
           .chord-grid .chord .mode-selector .minor.selected.suggested {
-            background-color: rgba(255, 220, 0, 0.8); }
+            background-color: rgba(255, 220, 0, 0.9); }
       .chord-grid .chord .mode-selector .diminished {
         width: 100%;
         display: flex;
@@ -94,7 +94,7 @@
           .chord-grid .chord .mode-selector .diminished.selected.active {
             background-color: rgba(66, 204, 82, 0.8); }
           .chord-grid .chord .mode-selector .diminished.selected.suggested {
-            background-color: rgba(255, 220, 0, 0.8); }
+            background-color: rgba(255, 220, 0, 0.9); }
       .chord-grid .chord .mode-selector .mode-display {
         flex: 1;
         flex-direction: column;
